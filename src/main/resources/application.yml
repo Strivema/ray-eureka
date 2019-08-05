@@ -1,0 +1,24 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: ray-eureka
+  security:
+    basic:
+      enabled: true
+    user:
+      name: eureka
+      password: ${REGISTRY_SERVER_PASSWORD:eureka}
+eureka:
+  instance:
+    hostname: ray-eureka
+  server:
+    #关闭自我保护机制，防止失效的服务也被一直访问 （开发环境建议关闭 false)
+    enable-self-preservation: true
+    #该配置可以修改检查失效服务的时间，每隔5s检查失效服务，默认该配置是 60s （开发环境)
+    eviction-interval-timer-in-ms: 5000
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
